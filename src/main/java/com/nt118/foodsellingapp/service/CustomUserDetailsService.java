@@ -1,7 +1,6 @@
 package com.nt118.foodsellingapp.service;
 
 import com.nt118.foodsellingapp.dao.UserRepository;
-import com.nt118.foodsellingapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
