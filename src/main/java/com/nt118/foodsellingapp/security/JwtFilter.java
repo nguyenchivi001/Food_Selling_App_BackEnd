@@ -36,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 String email = jwtService.extractUsername(token);
-                System.out.println("✅ Email from token: " + email);
+                System.out.println("Email from token: " + email);
 
                 if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(email);
@@ -48,16 +48,16 @@ public class JwtFilter extends OncePerRequestFilter {
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                        System.out.println("✅ Authentication successful for: " + email);
+                        System.out.println("Authentication successful for: " + email);
                     } else {
-                        System.out.println("❌ Token is invalid for user: " + email);
+                        System.out.println("Token is invalid for user: " + email);
                     }
                 }
             } catch (Exception e) {
-                System.out.println("❌ Exception in JWT Filter: " + e.getMessage());
+                System.out.println("Exception in JWT Filter: " + e.getMessage());
             }
         } else {
-            System.out.println("⚠️ No valid Authorization header found: " + authHeader);
+            System.out.println("No valid Authorization header found: " + authHeader);
         }
 
         filterChain.doFilter(request, response);
