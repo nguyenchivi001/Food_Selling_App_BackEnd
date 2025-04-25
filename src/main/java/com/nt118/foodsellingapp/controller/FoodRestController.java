@@ -16,7 +16,6 @@ public class FoodRestController {
         foodService = theFoodService;
     }
 
-    // add mapping for "/list"
     @GetMapping("/foods")
     public List<Food> listFoods() {
         // get the food from db

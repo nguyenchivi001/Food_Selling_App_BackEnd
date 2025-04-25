@@ -34,11 +34,9 @@ public class AuthController {
     private JwtService jwtService;
 
     @Value("${jwt.refresh-expiration}")
-    private long refreshExpiration; // milliseconds
+    private long refreshExpiration;
 
-    // =====================
     // 1. LOGIN
-    // =====================
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         try {
@@ -51,17 +49,16 @@ public class AuthController {
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(request.getEmail());
 
-        String accessToken = jwtService.generateToken(userDetails);
+        String token = jwtService.generateToken(userDetails);
         String refreshToken = jwtService.generateRefreshToken(userDetails);
 
+        refreshTokenService.deleteByUser(request.getEmail());
         refreshTokenService.createRefreshToken(request.getEmail(), refreshToken, refreshExpiration);
 
-        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+        return ResponseEntity.ok(new AuthResponse(token, refreshToken));
     }
 
-    // =====================
     // 2. REFRESH TOKEN
-    // =====================
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
         String refreshToken = request.getRefreshToken();
@@ -78,8 +75,8 @@ public class AuthController {
                     && refreshTokenService.validateRefreshToken(refreshToken);
 
             if (isValid) {
-                String newAccessToken = jwtService.generateToken(userDetails);
-                return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshToken));
+                String newToken = jwtService.generateToken(userDetails);
+                return ResponseEntity.ok(new AuthResponse(newToken, refreshToken));
             }
 
         } catch (Exception e) {
@@ -89,9 +86,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    // =====================
     // 3. LOGOUT
-    // =====================
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestBody AuthRequest request) {
         refreshTokenService.deleteByUser(request.getEmail());
