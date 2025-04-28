@@ -8,7 +8,7 @@ import java.util.List;
 
 //@Controller
 @RestController
-@RequestMapping("/api/foods")
+@RequestMapping("/api")
 public class FoodRestController {
     private FoodService foodService;
 
@@ -16,8 +16,7 @@ public class FoodRestController {
         foodService = theFoodService;
     }
 
-    // add mapping for "/list"
-    @GetMapping("/list")
+    @GetMapping("/foods")
     public List<Food> listFoods() {
         // get the food from db
         List<Food> theFoods = foodService.findAll();
@@ -25,7 +24,7 @@ public class FoodRestController {
         return theFoods;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/foods")
     public Food addFood(@RequestBody Food newFood) {
         return foodService.save(newFood);
     }
