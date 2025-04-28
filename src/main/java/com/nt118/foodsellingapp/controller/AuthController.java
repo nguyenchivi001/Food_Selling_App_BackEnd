@@ -1,8 +1,11 @@
 package com.nt118.foodsellingapp.controller;
 
+import com.nt118.foodsellingapp.dao.UserRepository;
 import com.nt118.foodsellingapp.dto.AuthRequest;
 import com.nt118.foodsellingapp.dto.AuthResponse;
 import com.nt118.foodsellingapp.dto.RefreshTokenRequest;
+import com.nt118.foodsellingapp.dto.RegisterRequest;
+import com.nt118.foodsellingapp.entity.User;
 import com.nt118.foodsellingapp.security.JwtService;
 import com.nt118.foodsellingapp.service.CustomUserDetailsService;
 import com.nt118.foodsellingapp.service.RefreshTokenService;
@@ -14,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,6 +36,12 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
@@ -91,5 +101,26 @@ public class AuthController {
     public ResponseEntity<String> logout(@RequestBody AuthRequest request) {
         refreshTokenService.deleteByUser(request.getEmail());
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    // 4. REGISTER
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+        }
+
+        System.out.println("Name: " + request.getName());
+        System.out.println("Email: " + request.getEmail());
+        System.out.println("Pass: " + request.getPassword());
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setName(request.getName());
+        user.setRole("USER");
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Register successful");
     }
 }
