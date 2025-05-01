@@ -58,6 +58,12 @@ public class AuthController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
+        // 🔍 Kiểm tra email có tồn tại không
+        if (!userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Email không tồn tại");
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
@@ -65,7 +71,7 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             log.error("Login failed for user: {}", request.getEmail());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid email or password");
+                    .body("Sai thông tin đăng nhập");
         }
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(request.getEmail());
@@ -115,7 +121,7 @@ public class AuthController {
         }
 
         refreshTokenService.deleteByUser(request.getEmail());
-        return ResponseEntity.ok("Logged out successfully");
+        return ResponseEntity.ok("Đăng xuất thành công");
     }
 
     // 4. REGISTER
@@ -127,7 +133,7 @@ public class AuthController {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Email already exists");
+                    .body("Email đã tồn tại");
         }
 
         User user = new User();
@@ -142,7 +148,7 @@ public class AuthController {
         } catch (Exception e) {
             log.error("Registration failed: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Registration failed. Please try again later.");
+                    .body("Đăng nhập thất bại.");
         }
     }
 }
