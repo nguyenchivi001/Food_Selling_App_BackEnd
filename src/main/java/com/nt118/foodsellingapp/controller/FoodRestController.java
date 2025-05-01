@@ -1,6 +1,7 @@
 package com.nt118.foodsellingapp.controller;
 
 import com.nt118.foodsellingapp.dto.ApiResponse;
+import com.nt118.foodsellingapp.dto.FoodDTO;
 import com.nt118.foodsellingapp.entity.Food;
 import com.nt118.foodsellingapp.service.FoodService;
 import jakarta.validation.Valid;
@@ -19,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-//@Controller
 @RestController
 @RequestMapping("/api/foods")
 @CrossOrigin(origins = "*")
@@ -32,34 +32,34 @@ public class FoodRestController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<Food>>> listFoods(
+    public ResponseEntity<ApiResponse<Page<FoodDTO>>> listFoods(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
         Sort.Direction sortDirection = Sort.Direction.fromString(direction.toLowerCase());
-        Page<Food> foods = foodService.findAll(PageRequest.of(page, size, Sort.by(sortDirection, sortBy)));
+        Page<FoodDTO> foods = foodService.findAll(PageRequest.of(page, size, Sort.by(sortDirection, sortBy)));
         return ResponseEntity.ok(ApiResponse.success(foods));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Food>> getFood(@PathVariable int id) {
-        Food food = foodService.findById(id);
+    public ResponseEntity<ApiResponse<FoodDTO>> getFood(@PathVariable int id) {
+        FoodDTO food = foodService.findById(id);
         return ResponseEntity.ok(ApiResponse.success(food));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Food>> addFood(@Valid @RequestBody Food newFood) {
-        Food savedFood = foodService.save(newFood);
+    public ResponseEntity<ApiResponse<FoodDTO>> addFood(@Valid @RequestBody Food food) {
+        FoodDTO savedFood = foodService.save(food);
         return ResponseEntity.ok(ApiResponse.success(savedFood, "Food added successfully"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Food>> updateFood(
+    public ResponseEntity<ApiResponse<FoodDTO>> updateFood(
             @PathVariable int id,
             @Valid @RequestBody Food food) {
         food.setId(id);
-        Food updatedFood = foodService.save(food);
+        FoodDTO updatedFood = foodService.save(food);
         return ResponseEntity.ok(ApiResponse.success(updatedFood, "Food updated successfully"));
     }
 
@@ -70,12 +70,12 @@ public class FoodRestController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<Food>>> searchFoods(
+    public ResponseEntity<ApiResponse<Page<FoodDTO>>> searchFoods(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer categoryId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<Food> foods = foodService.search(name, categoryId, PageRequest.of(page, size));
+        Page<FoodDTO> foods = foodService.search(name, categoryId, PageRequest.of(page, size));
         return ResponseEntity.ok(ApiResponse.success(foods));
     }
 
