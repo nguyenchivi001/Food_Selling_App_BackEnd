@@ -1,9 +1,10 @@
-package com.nt118.foodsellingapp.service;
+package com.nt118.foodsellingapp.service.impl;
 
 import com.nt118.foodsellingapp.dao.RefreshTokenRepository;
 import com.nt118.foodsellingapp.dao.UserRepository;
 import com.nt118.foodsellingapp.entity.RefreshToken;
 import com.nt118.foodsellingapp.entity.User;
+import com.nt118.foodsellingapp.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
