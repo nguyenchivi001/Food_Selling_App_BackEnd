@@ -1,7 +1,7 @@
 package com.nt118.foodsellingapp.service.impl;
 
-import com.nt118.foodsellingapp.dao.RefreshTokenRepository;
-import com.nt118.foodsellingapp.dao.UserRepository;
+import com.nt118.foodsellingapp.repository.RefreshTokenRepository;
+import com.nt118.foodsellingapp.repository.UserRepository;
 import com.nt118.foodsellingapp.entity.RefreshToken;
 import com.nt118.foodsellingapp.entity.User;
 import com.nt118.foodsellingapp.service.RefreshTokenService;

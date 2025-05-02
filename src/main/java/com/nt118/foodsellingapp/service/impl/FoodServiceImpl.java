@@ -3,7 +3,7 @@ package com.nt118.foodsellingapp.service.impl;
 import com.nt118.foodsellingapp.dto.FoodDTO;
 import com.nt118.foodsellingapp.entity.Food;
 import com.nt118.foodsellingapp.exception.ResourceNotFoundException;
-import com.nt118.foodsellingapp.dao.FoodRepository;
+import com.nt118.foodsellingapp.repository.FoodRepository;
 import com.nt118.foodsellingapp.service.FoodService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,12 +1,11 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dao.UserRepository;
+import com.nt118.foodsellingapp.repository.UserRepository;
 import com.nt118.foodsellingapp.dto.AuthRequest;
 import com.nt118.foodsellingapp.dto.AuthResponse;
 import com.nt118.foodsellingapp.dto.RefreshTokenRequest;
 import com.nt118.foodsellingapp.dto.RegisterRequest;
 import com.nt118.foodsellingapp.entity.User;
-import com.nt118.foodsellingapp.exception.BadRequestException;
 import com.nt118.foodsellingapp.security.JwtService;
 import com.nt118.foodsellingapp.service.CustomUserDetailsService;
 import com.nt118.foodsellingapp.service.RefreshTokenService;

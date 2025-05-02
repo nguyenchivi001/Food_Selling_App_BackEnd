@@ -1,4 +1,4 @@
-package com.nt118.foodsellingapp.dao;
+package com.nt118.foodsellingapp.repository;
 
 import com.nt118.foodsellingapp.entity.Food;
 import org.springframework.data.domain.Page;

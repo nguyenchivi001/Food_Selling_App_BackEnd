@@ -1,9 +1,13 @@
 package com.nt118.foodsellingapp.dto;
 
-import lombok.Data;
+import lombok.*;
+
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FoodDTO {
     private int id;
     private String name;
