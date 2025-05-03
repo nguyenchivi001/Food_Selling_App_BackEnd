@@ -3,6 +3,7 @@ package com.nt118.foodsellingapp.service.impl;
 import com.nt118.foodsellingapp.dto.FoodDTO;
 import com.nt118.foodsellingapp.entity.Food;
 import com.nt118.foodsellingapp.exception.ResourceNotFoundException;
+import com.nt118.foodsellingapp.mapper.FoodMapper;
 import com.nt118.foodsellingapp.repository.FoodRepository;
 import com.nt118.foodsellingapp.service.FoodService;
 import org.springframework.data.domain.Page;
@@ -21,10 +22,12 @@ import java.util.UUID;
 @Transactional
 public class FoodServiceImpl implements FoodService {
     private final FoodRepository foodRepository;
+    private final FoodMapper foodMapper;
     private final Path rootLocation = Paths.get("src/main/resources/static/images");
 
-    public FoodServiceImpl(FoodRepository foodRepository) {
+    public FoodServiceImpl(FoodRepository foodRepository, FoodMapper foodMapper) {
         this.foodRepository = foodRepository;
+        this.foodMapper = foodMapper;
         try {
             if (!Files.exists(rootLocation)) {
                 Files.createDirectories(rootLocation);
@@ -34,30 +37,11 @@ public class FoodServiceImpl implements FoodService {
         }
     }
 
-    private FoodDTO convertToDTO(Food food) {
-        if (food == null) {
-            return null;
-        }
-        
-        FoodDTO dto = new FoodDTO();
-        dto.setId(food.getId());
-        dto.setName(food.getName());
-        dto.setDescription(food.getDescription());
-        dto.setPrice(food.getPrice());
-        dto.setImageFilename(food.getImageFilename());
-        dto.setCategoryId(food.getCategory().getId());
-        dto.setCategoryName(food.getCategory().getName());
-        dto.setStockQuantity(food.getStockQuantity());
-        dto.setAvailable(food.isAvailable());
-        
-        return dto;
-    }
-
     @Override
     @Transactional(readOnly = true)
     public Page<FoodDTO> findAll(Pageable pageable) {
         Page<Food> foods = foodRepository.findAll(pageable);
-        return foods.map(this::convertToDTO);
+        return foods.map(foodMapper::toDTO);
     }
 
     @Override
@@ -65,14 +49,14 @@ public class FoodServiceImpl implements FoodService {
     public FoodDTO findById(int id) {
         Food food = foodRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Food not found with id: " + id));
-        return convertToDTO(food);
+        return foodMapper.toDTO(food);
     }
 
     @Override
     @Transactional
     public FoodDTO save(Food food) {
         Food savedFood = foodRepository.save(food);
-        return convertToDTO(savedFood);
+        return foodMapper.toDTO(savedFood);
     }
 
     @Override
@@ -105,7 +89,7 @@ public class FoodServiceImpl implements FoodService {
         } else {
             foods = foodRepository.findAll(pageable);
         }
-        return foods.map(this::convertToDTO);
+        return foods.map(foodMapper::toDTO);
     }
 
     @Override
