@@ -1,107 +1,52 @@
 package com.nt118.foodsellingapp.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
-@Table(name="foods")
+@Table(name = "foods")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Food {
-    // define fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private int id;
 
-    @Column(name="name")
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name="description")
+    @NotBlank(message = "Description is required")
+    @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name="price")
-    private int price;
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
-    @Column(name="image_url")
-    private String imageUrl;
+    @Column(name = "image_filename", length = 255)
+    private String imageFilename;
 
-    @Column(name="category_id")
-    private int categoryId;
+    @NotNull(message = "Category is required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    // define constuctors
-    public Food() {
+    @NotNull(message = "Stock quantity is required")
+    @Min(value = 0, message = "Stock quantity cannot be negative")
+    @Column(name="stock_quantity")
+    private Integer stockQuantity;
 
-    }
-
-    public Food(int id, String name, String description, int price, String imageUrl, int categoryId) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.categoryId = categoryId;
-    }
-
-    // define getter/setter
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    // define toString
-    @Override
-    public String toString() {
-        return "Food{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", categoryId=" + categoryId +
-                '}';
-    }
+    @Column(name = "is_available")
+    private boolean available = true;
 }
 
 

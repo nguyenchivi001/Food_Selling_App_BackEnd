@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dao.UserRepository;
+import com.nt118.foodsellingapp.repository.UserRepository;
 import com.nt118.foodsellingapp.dto.AuthRequest;
 import com.nt118.foodsellingapp.dto.AuthResponse;
 import com.nt118.foodsellingapp.dto.RefreshTokenRequest;
@@ -9,6 +9,8 @@ import com.nt118.foodsellingapp.entity.User;
 import com.nt118.foodsellingapp.security.JwtService;
 import com.nt118.foodsellingapp.service.CustomUserDetailsService;
 import com.nt118.foodsellingapp.service.RefreshTokenService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,8 +20,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
@@ -48,17 +52,28 @@ public class AuthController {
 
     // 1. LOGIN
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
+        // 🔍 Kiểm tra email có tồn tại không
+        if (!userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Email không tồn tại");
+        }
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            log.error("Login failed for user: {}", request.getEmail());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Sai thông tin đăng nhập");
         }
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(request.getEmail());
-
         String token = jwtService.generateToken(userDetails);
         String refreshToken = jwtService.generateRefreshToken(userDetails);
 
@@ -70,12 +85,12 @@ public class AuthController {
 
     // 2. REFRESH TOKEN
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
-        String refreshToken = request.getRefreshToken();
-
-        if (refreshToken == null || refreshToken.isBlank()) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
+
+        String refreshToken = request.getRefreshToken();
 
         try {
             String email = jwtService.extractUsername(refreshToken);
@@ -90,37 +105,49 @@ public class AuthController {
             }
 
         } catch (Exception e) {
-            // log.error("Invalid refresh token: {}", e.getMessage());
+            log.error("Invalid refresh token: {}", e.getMessage());
         }
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("Invalid refresh token");
     }
 
     // 3. LOGOUT
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> logout(@Valid @RequestBody AuthRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+
         refreshTokenService.deleteByUser(request.getEmail());
-        return ResponseEntity.ok("Logged out successfully");
+        return ResponseEntity.ok("Đăng xuất thành công");
     }
 
     // 4. REGISTER
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
 
-        System.out.println("Name: " + request.getName());
-        System.out.println("Email: " + request.getEmail());
-        System.out.println("Pass: " + request.getPassword());
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Email đã tồn tại");
+        }
+
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setName(request.getName());
         user.setRole("USER");
 
-        userRepository.save(user);
-
-        return ResponseEntity.ok("Register successful");
+        try {
+            userRepository.save(user);
+            return ResponseEntity.ok("Register successful");
+        } catch (Exception e) {
+            log.error("Registration failed: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Đăng nhập thất bại.");
+        }
     }
 }

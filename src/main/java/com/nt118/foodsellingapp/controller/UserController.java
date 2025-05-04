@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dao.UserRepository;
+import com.nt118.foodsellingapp.repository.UserRepository;
 import com.nt118.foodsellingapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
