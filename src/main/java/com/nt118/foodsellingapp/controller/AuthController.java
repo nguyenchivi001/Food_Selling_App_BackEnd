@@ -1,10 +1,7 @@
 package com.nt118.foodsellingapp.controller;
 
+import com.nt118.foodsellingapp.dto.*;
 import com.nt118.foodsellingapp.repository.UserRepository;
-import com.nt118.foodsellingapp.dto.AuthRequest;
-import com.nt118.foodsellingapp.dto.AuthResponse;
-import com.nt118.foodsellingapp.dto.RefreshTokenRequest;
-import com.nt118.foodsellingapp.dto.RegisterRequest;
 import com.nt118.foodsellingapp.entity.User;
 import com.nt118.foodsellingapp.security.JwtService;
 import com.nt118.foodsellingapp.service.CustomUserDetailsService;
@@ -114,7 +111,7 @@ public class AuthController {
 
     // 3. LOGOUT
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Valid @RequestBody AuthRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
