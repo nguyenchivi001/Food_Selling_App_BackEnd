@@ -6,6 +6,7 @@ import com.nt118.foodsellingapp.exception.ResourceNotFoundException;
 import com.nt118.foodsellingapp.mapper.FoodMapper;
 import com.nt118.foodsellingapp.repository.FoodRepository;
 import com.nt118.foodsellingapp.service.FoodService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,10 @@ import java.util.UUID;
 @Service
 @Transactional
 public class FoodServiceImpl implements FoodService {
-    private final FoodRepository foodRepository;
-    private final FoodMapper foodMapper;
+    @Autowired
+    private FoodRepository foodRepository;
+    @Autowired
+    private FoodMapper foodMapper;
     private final Path rootLocation = Paths.get("src/main/resources/static/images");
 
     public FoodServiceImpl(FoodRepository foodRepository, FoodMapper foodMapper) {
