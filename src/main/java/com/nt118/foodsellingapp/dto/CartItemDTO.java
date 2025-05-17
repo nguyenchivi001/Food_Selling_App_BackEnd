@@ -18,5 +18,6 @@ public class CartItemDTO {
     private String foodName;
     private Integer quantity;
     private BigDecimal price;
+    private String imageFilename;
     private String createdAt;
 }

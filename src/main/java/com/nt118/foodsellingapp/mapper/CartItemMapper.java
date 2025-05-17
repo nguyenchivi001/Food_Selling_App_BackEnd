@@ -13,6 +13,7 @@ public class CartItemMapper {
         cartItemDTO.setFoodName(cartItem.getFood().getName());
         cartItemDTO.setQuantity(cartItem.getQuantity());
         cartItemDTO.setPrice(cartItem.getFood().getPrice());
+        cartItemDTO.setImageFilename(cartItem.getFood().getImageFilename());
         cartItemDTO.setCreatedAt(cartItem.getCreatedAt().toString());
         return cartItemDTO;
     }
