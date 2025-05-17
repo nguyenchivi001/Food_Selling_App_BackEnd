@@ -1,4 +1,4 @@
-package com.nt118.foodsellingapp.dto;
+package com.nt118.foodsellingapp.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
