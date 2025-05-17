@@ -11,6 +11,8 @@ public class FavoriteItemMapper {
         favoriteItemDTO.setId(favoriteItem.getId());
         favoriteItemDTO.setFoodId(favoriteItem.getFood().getId());
         favoriteItemDTO.setFoodName(favoriteItem.getFood().getName());
+        favoriteItemDTO.setPrice(favoriteItem.getFood().getPrice());
+        favoriteItemDTO.setImageFilename(favoriteItem.getFood().getImageFilename());
         favoriteItemDTO.setCreatedAt(favoriteItem.getCreatedAt().toString());
         return favoriteItemDTO;
     }
