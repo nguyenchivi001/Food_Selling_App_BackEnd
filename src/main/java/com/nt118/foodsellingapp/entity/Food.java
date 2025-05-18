@@ -26,7 +26,7 @@ public class Food {
     private String description;
 
     @NotNull(message = "Price is required")
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @Column(name = "price", nullable = false)
     private Double price;
 
     @Column(name = "image_filename", length = 255)
