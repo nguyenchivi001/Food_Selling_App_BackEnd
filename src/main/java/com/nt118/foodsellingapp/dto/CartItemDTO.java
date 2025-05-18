@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +15,7 @@ public class CartItemDTO {
     private Integer foodId;
     private String foodName;
     private Integer quantity;
-    private BigDecimal price;
+    private Double price;
     private String imageFilename;
     private String createdAt;
 }
