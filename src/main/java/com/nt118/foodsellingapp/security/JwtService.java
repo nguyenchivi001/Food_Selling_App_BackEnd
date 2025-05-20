@@ -90,7 +90,6 @@ public class JwtService {
                 .getBody();
     }
 
-    // Trích xuất roles từ token để gán vào SecurityContext
     public List<GrantedAuthority> getAuthorities(String token) {
         Claims claims = extractAllClaims(token);
         List<String> roles = claims.get("role", List.class);
