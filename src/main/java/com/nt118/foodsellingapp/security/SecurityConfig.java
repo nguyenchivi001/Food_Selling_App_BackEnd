@@ -40,9 +40,11 @@ public class SecurityConfig {
                                 "/my-api-ui.html",
                                 "/my-api-docs").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/user/me").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/foods/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/cart-items/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/favorite-items/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/orders/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
