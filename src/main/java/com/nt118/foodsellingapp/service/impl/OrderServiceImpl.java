@@ -13,6 +13,8 @@ import com.nt118.foodsellingapp.repository.OrderRepository;
 import com.nt118.foodsellingapp.repository.UserRepository;
 import com.nt118.foodsellingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -123,5 +125,34 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
         orderRepository.delete(order);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<OrderDTO> searchOrders(Integer userId, String name, String status, Pageable pageable) {
+        Page<Order> orderPage;
+
+        // Nếu chỉ lọc theo userId (ví dụ: client xem lịch sử của mình)
+        if (userId != null && (name == null || name.isEmpty())) {
+            if (status != null && !status.isEmpty()) {
+                orderPage = orderRepository.findByUserIdAndStatus(userId, status, pageable);
+            } else {
+                orderPage = orderRepository.findAllByUserId(userId, pageable); // bạn cần thêm hàm này vào repo
+            }
+
+            // Nếu admin lọc theo tên người dùng
+        } else if (name != null && !name.isEmpty()) {
+            if (status != null && !status.isEmpty()) {
+                orderPage = orderRepository.findByUserNameContainingAndStatus(name, status, pageable);
+            } else {
+                orderPage = orderRepository.findByUserNameContaining(name, pageable);
+            }
+
+            // Không lọc gì cả: trả về toàn bộ (paging)
+        } else {
+            orderPage = orderRepository.findAll(pageable);
+        }
+
+        return orderPage.map(orderMapper::convertToOrderDTO);
     }
 }
