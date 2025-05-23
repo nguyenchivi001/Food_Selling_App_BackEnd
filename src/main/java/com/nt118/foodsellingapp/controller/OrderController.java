@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,15 +23,15 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<ApiResponse<OrderDTO>> createOrder(@RequestBody OrderDTO orderDTO) {
         OrderDTO createdOrder = orderService.createOrder(orderDTO);
-        return ResponseEntity.ok(createdOrder);
+        return ResponseEntity.ok(ApiResponse.success(createdOrder));
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> getAllOrders() {
         List<OrderDTO> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(ApiResponse.success(orders));
     }
 
     @GetMapping("/search")
@@ -47,14 +46,14 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable int id, @RequestParam String status) {
+    public ResponseEntity<ApiResponse<OrderDTO>> updateOrderStatus(@PathVariable int id, @RequestParam String status) {
         OrderDTO updatedOrder = orderService.updateOrderStatus(id, status);
-        return ResponseEntity.ok(updatedOrder);
+        return ResponseEntity.ok(ApiResponse.success(updatedOrder));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<Void>> deleteOrder(@PathVariable int id) {
         orderService.deleteOrder(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success(null)); // success true, data null
     }
 }

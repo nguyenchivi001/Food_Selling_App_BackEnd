@@ -62,4 +62,11 @@ public class CartController {
         cartService.removeFromCart(userId, foodId);
         return ResponseEntity.ok(ApiResponse.success(null, "Item removed from cart successfully"));
     }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> clearCart(Authentication authentication) {
+        int userId = SecurityUtil.extractUserId(authentication);
+        cartService.clearCart(userId);
+        return ResponseEntity.ok(ApiResponse.success(null, "Cart cleared successfully"));
+    }
 }

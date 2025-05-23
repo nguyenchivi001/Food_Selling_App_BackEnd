@@ -100,4 +100,10 @@ public class CartServiceImpl implements CartService {
                 .map(cartItemMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public void clearCart(int userId) {
+        cartItemRepository.deleteByUserId(userId);
+    }
 }
