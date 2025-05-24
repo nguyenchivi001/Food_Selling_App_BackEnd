@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.ApiResponse;
+import com.nt118.foodsellingapp.dto.Response.ApiResponse;
 import com.nt118.foodsellingapp.dto.FoodDTO;
 import com.nt118.foodsellingapp.entity.Food;
 import com.nt118.foodsellingapp.service.FoodService;
@@ -23,11 +23,11 @@ import java.nio.file.Paths;
 @RestController
 @RequestMapping("/api/foods")
 @CrossOrigin(origins = "*")
-public class FoodRestController {
+public class FoodController {
     private final FoodService foodService;
     private final Path rootLocation = Paths.get("src/main/resources/static/images");
 
-    public FoodRestController(FoodService theFoodService) {
+    public FoodController(FoodService theFoodService) {
         foodService = theFoodService;
     }
 

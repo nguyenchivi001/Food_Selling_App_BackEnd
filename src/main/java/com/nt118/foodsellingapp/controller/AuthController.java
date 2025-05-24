@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.*;
+import com.nt118.foodsellingapp.dto.Response.AuthResponse;
 import com.nt118.foodsellingapp.repository.UserRepository;
 import com.nt118.foodsellingapp.entity.User;
 import com.nt118.foodsellingapp.dto.request.AuthRequest;

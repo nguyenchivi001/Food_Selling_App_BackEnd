@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.ApiResponse;
+import com.nt118.foodsellingapp.dto.Response.ApiResponse;
 import com.nt118.foodsellingapp.dto.CartItemDTO;
 import com.nt118.foodsellingapp.dto.request.CartItemRequest;
 import com.nt118.foodsellingapp.service.CartService;
@@ -19,7 +19,8 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class CartController {
 
-    private final CartService cartService;
+    @Autowired
+    private CartService cartService;
 
     @Autowired
     public CartController(CartService cartService) {
@@ -60,5 +61,12 @@ public class CartController {
         int userId = SecurityUtil.extractUserId(authentication);
         cartService.removeFromCart(userId, foodId);
         return ResponseEntity.ok(ApiResponse.success(null, "Item removed from cart successfully"));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> clearCart(Authentication authentication) {
+        int userId = SecurityUtil.extractUserId(authentication);
+        cartService.clearCart(userId);
+        return ResponseEntity.ok(ApiResponse.success(null, "Cart cleared successfully"));
     }
 }
