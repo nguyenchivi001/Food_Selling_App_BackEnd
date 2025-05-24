@@ -6,6 +6,7 @@ import com.nt118.foodsellingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,10 @@ public class OrderController {
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<OrderDTO> orders = orderService.searchOrders(userId, name, status, PageRequest.of(page, size));
+
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<OrderDTO> orders = orderService.searchOrders(userId, name, status, pageable);
         return ResponseEntity.ok(ApiResponse.success(orders));
     }
 
@@ -54,6 +58,6 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteOrder(@PathVariable int id) {
         orderService.deleteOrder(id);
-        return ResponseEntity.ok(ApiResponse.success(null)); // success true, data null
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

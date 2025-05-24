@@ -19,6 +19,7 @@ public class OrderMapper {
         }).toList();
 
         OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setId(order.getId());
         orderDTO.setUserId(order.getUser().getId());
         orderDTO.setDeliveryAddress(order.getDeliveryAddress());
         orderDTO.setTotalPrice(order.getTotalPrice());

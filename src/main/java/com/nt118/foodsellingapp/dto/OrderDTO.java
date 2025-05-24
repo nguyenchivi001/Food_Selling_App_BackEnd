@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
+    private int id;
     private int userId;
     private String deliveryAddress;
     private String paymentMethod;
