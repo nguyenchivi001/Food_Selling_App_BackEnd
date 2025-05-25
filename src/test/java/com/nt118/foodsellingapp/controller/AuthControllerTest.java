@@ -68,14 +68,14 @@ class AuthControllerTest {
     @BeforeEach
     void setUp() {
         authRequest = new AuthRequest();
-        authRequest.setEmail("test@example.com");
-        authRequest.setPassword("password");
+        authRequest.setEmail("user1@example.com");
+        authRequest.setPassword("123456");
 
         refreshTokenRequest = new RefreshTokenRequest();
         refreshTokenRequest.setRefreshToken("refresh-token");
 
         logoutRequest = new LogoutRequest();
-        logoutRequest.setEmail("test@example.com");
+        logoutRequest.setEmail("user1@example.com");
 
         registerRequest = new RegisterRequest();
         registerRequest.setEmail("test@example.com");

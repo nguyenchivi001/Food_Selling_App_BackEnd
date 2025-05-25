@@ -55,7 +55,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{foodId}")
-    public ResponseEntity<ApiResponse<Void>> removeFromCart(
+    public ResponseEntity<ApiResponse<Void>> removeFromCart (
             @PathVariable Integer foodId,
             Authentication authentication) {
         int userId = SecurityUtil.extractUserId(authentication);
