@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.Response.ApiResponse;
+import com.nt118.foodsellingapp.dto.response.ApiResponse;
 import com.nt118.foodsellingapp.dto.FavoriteItemDTO;
 import com.nt118.foodsellingapp.dto.request.FavoriteItemRequest;
 import com.nt118.foodsellingapp.service.FavoriteService;

@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.Response.ApiResponse;
+import com.nt118.foodsellingapp.dto.response.ApiResponse;
 import com.nt118.foodsellingapp.dto.CategoryDTO;
 import com.nt118.foodsellingapp.service.CategoryService;
 import org.springframework.http.ResponseEntity;

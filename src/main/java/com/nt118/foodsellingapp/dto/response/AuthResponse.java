@@ -1,4 +1,4 @@
-package com.nt118.foodsellingapp.dto.Response;
+package com.nt118.foodsellingapp.dto.response;
 
 import lombok.*;
 

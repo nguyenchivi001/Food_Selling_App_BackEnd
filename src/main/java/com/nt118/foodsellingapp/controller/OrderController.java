@@ -1,7 +1,7 @@
 package com.nt118.foodsellingapp.controller;
 
 import com.nt118.foodsellingapp.dto.OrderDTO;
-import com.nt118.foodsellingapp.dto.Response.ApiResponse;
+import com.nt118.foodsellingapp.dto.response.ApiResponse;
 import com.nt118.foodsellingapp.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

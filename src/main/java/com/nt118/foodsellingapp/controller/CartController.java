@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.Response.ApiResponse;
+import com.nt118.foodsellingapp.dto.response.ApiResponse;
 import com.nt118.foodsellingapp.dto.CartItemDTO;
 import com.nt118.foodsellingapp.dto.request.CartItemRequest;
 import com.nt118.foodsellingapp.service.CartService;
