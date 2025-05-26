@@ -1,6 +1,6 @@
 package com.nt118.foodsellingapp.controller;
 
-import com.nt118.foodsellingapp.dto.Response.ApiResponse;
+import com.nt118.foodsellingapp.dto.response.ApiResponse;
 import com.nt118.foodsellingapp.dto.CartItemDTO;
 import com.nt118.foodsellingapp.dto.request.CartItemRequest;
 import com.nt118.foodsellingapp.service.CartService;
@@ -55,7 +55,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{foodId}")
-    public ResponseEntity<ApiResponse<Void>> removeFromCart(
+    public ResponseEntity<ApiResponse<Void>> removeFromCart (
             @PathVariable Integer foodId,
             Authentication authentication) {
         int userId = SecurityUtil.extractUserId(authentication);
